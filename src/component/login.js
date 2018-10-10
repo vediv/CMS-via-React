@@ -23,7 +23,11 @@ class Login extends Component {
    .then((data) =>  {
      if(data.status === 1)
      {
-       localStorage.setItem('username', email);
+       var name = data.data[0].name;
+       var first_name = name.split(' ').slice(0,1).join(' ');
+       var username = first_name.charAt(0).toUpperCase() + first_name.slice(1);
+       localStorage.setItem('username', username);
+       localStorage.setItem('email', email);
        localStorage.setItem('password', pass);
        this.props.history.push('/');
      }
@@ -33,7 +37,7 @@ class Login extends Component {
   }).catch((err) => console.log(err));
   }
   render() {
-     if (localStorage.getItem('username'))
+     if (localStorage.getItem('email'))
      {
       return <Redirect from ="/login" to="/" />
     }

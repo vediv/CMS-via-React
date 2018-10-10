@@ -3,6 +3,7 @@ import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLin
 import PropTypes from 'prop-types';
 import acc from './acc.png';
 
+
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 
 const propTypes = {
@@ -49,11 +50,15 @@ class DefaultHeader extends Component {
           <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
           </NavItem>
+          <NavItem className="d-md-down-none">
+           {localStorage.getItem('username')}
+          </NavItem>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
               <img src={acc} className="img-avatar" alt="Account" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
+            <DropdownItem><b><i style={{color:'black'}}> Hello, {localStorage.getItem('username')} </i></b></DropdownItem>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
               <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>

@@ -31,7 +31,7 @@ class DefaultLayout extends Component {
   }
 
   componentDidMount() {
-      if(localStorage.getItem('username')){
+      if(localStorage.getItem('email')){
       }
       else {
         this.setState({direct: true});

@@ -72,7 +72,7 @@ department(e) {
   }
 
   render() {
-    if (localStorage.getItem('username'))
+    if (localStorage.getItem('email'))
     {
      return <Redirect from ="/register" to="/" />
    }
