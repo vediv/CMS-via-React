@@ -15,8 +15,8 @@ class DefaultFooter extends Component {
 
     return (
       <React.Fragment>
-        <span><a href="#">CMS</a> &copy; 2018 OTT</span>
-        <span className="ml-auto">Powered by <a href="#">PlanetCast Media Services ltd.</a></span>
+     <span style={{color:'white'}}><b><a href="#/">CMS</a> &copy; 2018 OTT</b></span>
+        <span className="ml-auto" style={{color:'white'}}><b>Powered by <a href="#/">PlanetCast Media Services ltd.</a></b></span>
       </React.Fragment>
     );
   }

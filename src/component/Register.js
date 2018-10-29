@@ -123,13 +123,16 @@ department(e) {
                     </InputGroup>
                     < InputGroup className = "mb-3" >
                     <InputGroupAddon addonType = "prepend" >
-                  < i className = "fa fa-male" id = "genderm" >
-                    <span > Male < /span>
-                    <input type = "radio" name = "GENDER" value = "Male" onChange={this.gender.bind(this)} / > < /i>
-                     < i className = "fa fa-female" id = "genderf" >
-                    < span > Female < /span>
-                    < input type = "radio"  name = "GENDER" value = "Female" onChange={this.gender.bind(this)} / >
-                    </i>
+                    <InputGroupText>
+                  < i className = "fa fa-male" id = "genderm" >< /i>
+                    </InputGroupText>&nbsp;&nbsp;
+                     Male
+                   &nbsp;  <input type = "radio" name = "GENDER" value = "Male" onChange={this.gender.bind(this)} / >&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                   <InputGroupText>
+                     < i className = "fa fa-female" id = "genderf" ></i></InputGroupText>&nbsp;&nbsp;
+                   Female
+                    &nbsp;< input type = "radio"  name = "GENDER" value = "Female" onChange={this.gender.bind(this)} / >
+
                     </InputGroupAddon>
                   </InputGroup>
                     <InputGroup className="mb-3">

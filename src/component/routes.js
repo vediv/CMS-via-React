@@ -7,26 +7,39 @@ function Loading() {
   return <div>Loading...</div>;
 }
 
-const Dashboard = Loadable({
-  loader: () => import('./Page404'),
+const video = Loadable({
+  loader: () => import('./video'),
   loading: Loading,
 });
 
-const Colors = Loadable({
-  loader: () => import('./Page500'),
+const chart = Loadable({
+  loader: () => import('./charts'),
   loading: Loading,
 });
 
-const Carousels = Loadable({
-  loader: () => import('./Carousels'),
+
+
+const MainDashboard = Loadable({
+  loader: () => import('./MainDashboard'),
+  loading: Loading,
+});
+
+const Categories = Loadable({
+  loader: () => import('./categories'),
+  loading: Loading,
+});
+const Dialog = Loadable({
+  loader: () => import('./dialog'),
   loading: Loading,
 });
 
 const routes = [
     { path: '/', exact: true, name: 'Home', component: DefaultLayout },
-  { path: '/dashboard', name: 'Dashboard', component: Carousels },
-  { path: '/colors', name: 'Colors', component: Colors },
-    { path: '/carousels', name: 'Carousel', component: Dashboard },
+  { path: '/dashboard', name: 'Dashboard', component: MainDashboard },
+  { path: '/category', name: 'category', component: Categories  },
+      { path: '/live', name: 'Live', component: Dialog },
+            { path: '/plandetail', name: 'Plan Details', component: video },
+            { path: '/userlist', name: 'User List', component: chart },
 ];
 
 export default routes;

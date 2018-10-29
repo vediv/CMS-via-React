@@ -3,7 +3,6 @@ import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLin
 import PropTypes from 'prop-types';
 import acc from './acc.png';
 
-
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 
 const propTypes = {

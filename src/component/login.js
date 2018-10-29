@@ -32,9 +32,9 @@ class Login extends Component {
        this.props.history.push('/');
      }
      else {
-       this.props.history.push('/add');
+       this.props.history.push('/register');
      }
-  }).catch((err) => console.log(err));
+  }).catch((err) => console.log(err))
   }
   render() {
      if (localStorage.getItem('email'))
@@ -45,7 +45,7 @@ class Login extends Component {
     return (
       <div className="main">
       <div className="app flex-row align-items-center">
-        <Container className="main1">
+        <Container className="main1" fixed>
           <Row className="justify-content-center">
             <Col md="8">
               <CardGroup className="card1">
