@@ -1,5 +1,5 @@
 <?php
-$con=mysqli_connect("localhost","root","escl10.0");
+$con=mysqli_connect("localhost","test","escl1.0");
 if(!$con)
 {
 echo "not connected to server";

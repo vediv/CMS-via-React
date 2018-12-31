@@ -1,0 +1,30 @@
+.modal-content {
+  width: 120% !important;
+  margin-left: -70px !important;
+  height:550px !important;
+}
+#editmodal .nav {
+  display: inline-table !important;
+  font-weight: bold!important;
+}
+.tab-content {
+  margin-top: -372px!important;
+  margin-left: 150px!important;
+  height: 540px!important;
+}
+#editmodal .nav-tabs .nav-link.active,
+#editmodal .nav-tabs .nav-item.show .nav-link {
+  color: #ffffff !important;
+  background-color:  	#708090!important;
+  border-color: black!important;
+  border-bottom: -1px solid #c8ced3;
+}
+#editmodal .nav li {
+  padding: 5px !important;
+}
+/* .tab-pane active {
+  height: 200px !important;
+} */
+.p-picklist-source-controls,.p-picklist-target-controls{
+  display: none !important;
+}

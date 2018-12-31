@@ -1,203 +1,240 @@
 import React, { Component } from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
-import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
-
-
-class Charts extends Component {
-  constructor(props)
-  {
-    super(props);
-    this.state={
-      items:[],
-}
-  }
-  componentDidMount()
-  {
-    this.func();
-
-  }
-  func()
-    {
-          var formData = new FormData();
-          formData.append("action","charts");
-          fetch('http://192.168.24.46/cms/main.php', {
-          method: 'POST',
-          body: formData
-          }).then((res) => res.json())
-        .then((result) =>  {
-  this.setState({items:result.items});
-  
-       })
-        .catch((err)=>console.log(err))
-
-
-  }
-  render() {
-    const bar = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          hoverBorderColor: 'rgba(255,99,132,1)',
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-      ],
-    };
-    const pie = {
-      labels: [
-        'Red',
-        'Green',
-        'Yellow',
-      ],
-      datasets: [
-        {
-          data: [300, 50, 100],
-          backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-          ],
-          hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-          ],
-        }],
-    };
-
-    const options = {
-      tooltips: {
-        enabled: false,
-        custom: CustomTooltips
-      },
-      maintainAspectRatio: false
+export default class FileUploadComponent extends Component
+{
+   constructor(props) {
+      super(props);
+      this.state ={
+        image: ''
+      }
+      this.onFormSubmit = this.onFormSubmit.bind(this)
+      this.onChange = this.onChange.bind(this)
+      this.fileUpload = this.fileUpload.bind(this)
     }
-    return (
-      <div className="animated fadeIn">
-        <CardColumns className="cols-2">
-          <Card>
-            <CardHeader>
-              Bar Chart
-              <div className="card-header-actions">
-              </div>
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Bar data={bar} options={options} width={100} height={50} />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-           <CardHeader>
-             Pie Chart
-             <div className="card-header-actions">
-             </div>
-           </CardHeader>
-           <CardBody>
-             <div className="chart-wrapper">
-               <Pie data={pie} width={100} height={50}/>
-             </div>
-           </CardBody>
-         </Card>
-        </CardColumns>
-      </div>
-    );
-  }
+    onFormSubmit(e){
+      e.preventDefault()
+      this.fileUpload(this.state.image);
+    }
+    onChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+            return;
+      this.createImage(files[0]);
+    }
+    createImage(file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.setState({
+          image: e.target.result
+        })
+      };
+      reader.readAsDataURL(file);
+    }
+    fileUpload(image){
+            var formdata = new FormData();
+            formdata.append("action", "upload");
+            formdata.append("image", this.state.image);
+            console.log(this.state.image);
+            fetch('http://192.168.24.46/cms/main.php', {
+              mode: 'no-cors',
+                method: "POST",
+                headers: {
+                  "Content-Type": "multipart/form-data; boundary=AaB03x" +
+                  "--AaB03x" +
+                  "Content-Disposition: file" +
+                  "Content-Type: png" +
+                  "Content-Transfer-Encoding: binary" +
+                  "...data... " +
+                  "--AaB03x--",
+                  "Accept": "application/json",
+                  "type": "formData"
+                },
+                body: formdata
+           }).then((res) => res.json())
+           .then((data) =>  {
+              console.log(data);
+             }
+          ).catch((err) => console.log(err));
+          }
+
+
+   render()
+   {
+      return(
+
+         <form onSubmit={this.onFormSubmit} enctype="multipart/form-data" method='post'>
+        <h1> File Upload </h1>
+        <input type="file" name="image"  onChange={this.onChange} />
+        <button type="submit">Upload</button>
+      </form>
+      )
+   }
 }
 
-export default Charts;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { Component } from 'react';
-// import { Bar } from 'react-chartjs-2';
-// import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
-// import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+// import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+// import '../css/upload.css';
+// import {FileUpload} from 'primereact/fileupload';
 //
+// export default class upload extends Component {
+//     constructor(props) {
+//         super(props);
 //
+//         this.state = {
 //
-// class Charts extends Component {
-//   constructor(props)
-//   {
-//     super(props);
-//     this.state={
-//       users:[],
-//       date:[]
+//         };
 //     }
+//     uploadfiles (e) {
+//       e.preventDefault();
+//       var name = document.getElementById('name').value;
+//       var host = document.getElementById('host').value;
+//       var file = document.getElementById('file').value;
 //
-//   }
-//   componentDidMount()
-//   {
-//     this.chart();
+//       var formdata = new FormData();
 //
-//   }
+//       formdata.append("action", "upload");
+//       formdata.append("name", name);
+//       formdata.append("host", host);
+//       formdata.append("image", file);
 //
-// chart()
-//   {
-//         var formData = new FormData();
-//         formData.append("action","charts");
-//         fetch('http://192.168.24.46/cms/main.php', {
-//         method: 'POST',
-//         body: formData
-//         }).then((res) => res.json())
-//         .then((result) =>  {
-//         this.setState({users:result.items.user,date:result.items.date});
-//      })
-//       .catch((err)=>console.log(err))
-//
-//   }
-//   render() {
-//     const bar = {
-//       labels: this.state.users,
-//       datasets: [
-//         {
-//           label: 'My First dataset',
-//           backgroundColor: 'rgba(255,99,132,0.2)',
-//           borderColor: 'rgba(255,99,132,1)',
-//           borderWidth: 1,
-//           hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-//           hoverBorderColor: 'rgba(255,99,132,1)',
-//           data: this.state.date,
-//         },
-//       ],
-//     };
-//
-//     const options = {
-//       tooltips: {
-//         enabled: false,
-//         custom: CustomTooltips
-//       },
-//       maintainAspectRatio: false
+//       fetch('http://192.168.24.46/cms/main.php', {
+//          method: 'POST',
+//          body:formdata
+//      }).then((res) => res.json())
+//      .then((data) =>  {
+//         console.log(data);
+//        }
+//     ).catch((err) => console.log(err));
 //     }
-//     return (
-//       <div className="animated fadeIn">
-//         <CardColumns className="cols-2">
+//     render() {
+//         return (<div >
+//           <div className="app flex-row align-items-center">
+//             <Container fixed>
+//               <Row className="justify-content-center">
+//                 <Col md="8">
+//                   <CardGroup >
+//                     <Card className="p-4">
+//                       <CardBody>
+//                         <Form>
+//                           <h1>Upload</h1>
+//                           <InputGroup className="mb-3">
+//                             <InputGroupAddon addonType="prepend">
+//                               <InputGroupText>
+//                                 <i className="fa fa-file"></i>
+//                               </InputGroupText>
+//                             </InputGroupAddon>
+//                             <Input type="text" id="name" placeholder="File Name" />
+//                           </InputGroup>
+//                           <InputGroup className="mb-4">
+//                             <InputGroupAddon addonType="prepend">
+//                               <InputGroupText>
+//                                 <i className="fa fa-server"></i>
+//                               </InputGroupText>
+//                             </InputGroupAddon>
+//                             <Input type="text" id="host" placeholder="Server IP" />
+//                           </InputGroup>
+//                           <InputGroup className="mb-4">
+//                             <Input type="file" id="file" name="image"/>
+//                           </InputGroup>
+//                           <Row>
+//                             <Col>
+//                               <Button color="success" onClick={this.uploadfiles.bind(this)} >Upload</Button>
+//                             </Col>
+//                           </Row>
+//                         </Form>
+//                       </CardBody>
+//                     </Card>
+//                   </CardGroup>
+//                 </Col>
+//               </Row>
+//             </Container>
+//           </div>
+//           </div>
 //
-//           <Card>
-//             <CardHeader>
-//               Bar Chart
-//               <div className="card-header-actions">
-//                 <a href="http://www.chartjs.org" className="card-header-action">
-//                   <small className="text-muted">docs</small>
-//                 </a>
-//               </div>
-//             </CardHeader>
-//             <CardBody>
-//               <div className="chart-wrapper">
-//                 <Bar data={bar} options={options} />
-//               </div>
-//             </CardBody>
-//           </Card>
-//
-//
-//         </CardColumns>
-//       </div>
-//     );
-//   }
+//               );
+//             }
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { Component } from 'react';
+// import ReactDOM from 'react-dom';
+// import { FilePond, File, registerPlugin } from 'react-filepond';
+// import 'filepond/dist/filepond.min.css';
+// import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 //
-// export default Charts;
+// registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+//
+//
+// export default class App extends Component {
+//     constructor(props) {
+//         super(props);
+//
+//         this.state = {
+//             files: ['index.html']
+//         };
+//     }
+//
+//     render() {
+//         return (
+//             <div className="App">
+//
+//                 <FilePond allowMultiple={true}
+//                           maxFiles={3}
+//                           server="/api"
+//                           onupdatefiles={(fileItems) => {
+//                               this.setState({
+//                                   files: fileItems.map(fileItem => fileItem.file)
+//                               });
+//                           }}>
+//
+//                     {this.state.files.map(file => (
+//                         <File key={file} src={file} origin="local" />
+//                     ))}
+//
+//                 </FilePond>
+//
+//             </div>
+//         );
+//     }
+// }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
 
 import {
   AppBreadcrumb,
@@ -44,6 +46,7 @@ this.sidebar();
   sidebar () {
     var formdata = new FormData();
     formdata.append("action", "sidebar");
+    formdata.append("parent_id", 0);
     fetch('http://192.168.24.46/cms/main.php', {
        method: 'POST',
        body:formdata

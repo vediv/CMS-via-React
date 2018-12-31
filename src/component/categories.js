@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Button} from 'primereact/button';
+import Zoom from 'react-reveal/Zoom';
+import Fade from 'react-reveal/Fade';
 import {
   Card,
   CardBody,
-  CardFooter,
   Col,
   Container,
   Form,
@@ -14,14 +15,13 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row
+  Row, Modal, ModalBody, ModalHeader
 } from 'reactstrap';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {Paginator} from 'primereact/paginator';
 import {InputText} from 'primereact/inputtext';
-import Modal from "react-responsive-modal";
 import Loader from 'react-loader';
 import '../css/categories.css';
 
@@ -55,19 +55,22 @@ class Category extends Component {
       count:0,
       re:false,
       first:0,
-      rows:5,
+      rows:6,
       open: false,
       update:[],
       delete:[],
-      c_id:0
+      c_id:0,
+      loading: true,
+      globalFilter: null
     }
       this.onPageChange = this.onPageChange.bind(this);
         this.edit = this.edit.bind(this);
         this.status = this.status.bind(this);
       this.update = this.update.bind(this);
-        //  this.delete = this.delete.bind(this);
+      this.delete = this.delete.bind(this);
         this.Active_inactive = this.Active_inactive.bind(this);
-
+        this.export = this.export.bind(this);
+        this.mainedit = this.mainedit.bind(this);
 
   }
   componentDidMount()
@@ -78,6 +81,7 @@ class Category extends Component {
 
 func(start,totalrow)
   {
+    setTimeout(() => {
         var formData = new FormData();
         formData.append("action","category");
         formData.append("parent_id",'0');
@@ -88,12 +92,13 @@ func(start,totalrow)
         body: formData
         }).then((res) => res.json())
       .then((result) =>  {
-this.setState({items:result.items,re:true,count:result.totalRecord});
+this.setState({items:result.items,re:true,count:result.totalRecord,loading:false});
               console.log(result.totalRecord);
      })
       .catch((err)=>console.log(err))
-
+}, 1000);
   }
+
 
  onCloseModal = () => {
    this.setState({ open: false });
@@ -106,19 +111,29 @@ this.setState({items:result.items,re:true,count:result.totalRecord});
        });
        this.func(event.first,event.rows);
    }
-
+   datapage(field) {
+     var id=field.id;
+     return(
+       <div>
+       <p onClick ={() => this.mainedit(id)}>{id}</p>
+       </div>
+   );
+   }
+   mainedit(id){
+    this.props.history.push(`/media_content/${id}/metadata`);
+   }
   actionTemplate(field) {
     var id=field.id;
     return(
       <div>
-      <Button style={{height:'14px', width:'14px'}} type="button" icon="pi pi-pencil" className="p-button-warning" onClick ={() => this.edit(id)}/>&nbsp;
-      <Button style={{height:'14px', width:'14px'}} type="button" icon="pi pi-trash" className="p-button-danger" onClick ={() => this.delete(id)}/>
+      <Button style={{height:'18px', width:'18px'}} type="button" icon="pi pi-pencil" className="p-button-primary" onClick ={() => this.edit(id)}/>&nbsp;
+      <Button style={{height:'18px', width:'18px'}} type="button" icon="pi pi-trash" className="p-button-danger" onClick ={() => this.delete(id)}/>
       </div>
   );
   }
 
   edit(id)
-    {
+    { alert(id);
       this.setState({
           open: true,
           c_id: id
@@ -136,14 +151,13 @@ this.setState({items:result.items,re:true,count:result.totalRecord});
           .then((result) =>  {
             var update= result.items[0];
             var id=this.state.c_id;
-      var prevdata = <div className="app flex-row align-items-center"  style={{width:950, height:600}}>
+      var prevdata = <div  style={{width:950, height:600}}>
               <Container>
-                <Row className="justify-content-center">
+                <Row>
                   <Col md="6"  >
-                    <Card className="mx-41">
+                    <Card >
                       <CardBody className="p-4" >
                         <Form>
-                          <h4>Edit Your Records</h4>
                           <InputGroup className="mb-3">
                             <InputGroupAddon addonType="prepend">
                               <InputGroupText>
@@ -190,7 +204,7 @@ this.setState({items:result.items,re:true,count:result.totalRecord});
 
                           </InputGroupAddon>
                         </InputGroup>
-                        <button style={{height:'40px', width:'450px'}} onClick ={() => this.update(id)} > Update </button>
+                        <button style={{height:'40px', width:'400px'}} class="btn btn-success" onClick ={() => this.update(id)} > Update </button>
                         </Form>
                       </CardBody>
                     </Card>
@@ -253,7 +267,6 @@ this.setState({items:result.items,re:true,count:result.totalRecord});
 
     Active_inactive(status,id)
    {
-     alert('ved');
      var formData = new FormData();
      formData.append("action","status_update");
      formData.append("Status",status);
@@ -272,8 +285,7 @@ this.setState({items:result.items,re:true,count:result.totalRecord});
 status(field)
    {
      var status1 = field.status;
-     var id = field.id;
-     var content=status1=='1'?<button onClick={() => this.Active_inactive(status1,field.id)}>Active</button>:<button  onClick={() => this.Active_inactive(status1,field.id)}>Inactive</button>
+     var content=status1==='1'?<button style={{fontSize:'10px'}} class="btn btn-success" onClick={() => this.Active_inactive(status1,field.id)}><b>Active</b></button>:<button style={{fontSize:'10px'}} class="btn btn-danger" onClick={() => this.Active_inactive(status1,field.id)}><b>Inactive</b></button>
      return content;
    }
 
@@ -281,7 +293,9 @@ status(field)
 alert('add user');
  }
 
-
+ export() {
+         this.dt.exportCSV();
+     }
    icon(e)
    {
      return <div className={e.icon}></div>
@@ -289,31 +303,38 @@ alert('add user');
   render() {
           var recCount = this.state.count;
           var footer = "There are total " + recCount + ' record';
-          var header = <div style={{'textAlign':'right'}}>
+          var header = <div>
+              <div style={{textAlign:'left'}}><Button type="button" icon="pi pi-external-link" iconPos="left" label="CSV" onClick={this.export}/></div>
+          <div style={{'textAlign':'right'}}>
           <InputText type="search" onInput={(e) => this.setState({globalFilter: e.target.value})} placeholder="Global Search" size="30"/>
             <i className="pi pi-search"  style={{margin:'4px 4px 0 0'}}></i>
-          </div>
+          </div></div>
     return (
       <div className="category">
-        <div className="add-category" style={{color:'white'}}>
+        <div className="add-category" style={{color:'black'}}>
               <h3>Add Category <Button style={{height:'24px', width:'24px'}} icon="pi pi-plus" onClick={this.addNew}/></h3>
         </div>
         <div className="total-record">
         <div className="side-div"></div>
-            <DataTable value={this.state.items} header={header} footer={footer} style={{ fontSize: '13px' }}>
-                <Column field="id" header="ID" style={{textAlign:'center'}}/>
-                <Column field="name" header="NAME" sortable={true}  style={{textAlign:'center'}} />
+        <Zoom>  <Fade>
+            <DataTable value={this.state.items} header={header} footer={footer} fade={true} globalFilter={this.state.globalFilter} ref={(el) => { this.dt = el; }} resizableColumns={true} scrollable={true} scrollHeight="245px" lazy={true} responsive={false} loading={this.state.loading} style={{ fontSize: '13px' }}>
+
+             <Column header="ID" body={this.datapage.bind(this)} style={{textAlign:'center',width:'8%'}}/>
+                <Column field="name" header="NAME" sortable={true} style={{textAlign:'center',width:'20%'}} />
                 <Column field="icon" header="ICON" body={this.icon} style={{textAlign:'center'}} />
-                <Column field="url" header="URL" style={{textAlign:'center'}}/>
+                <Column field="url" header="URL" style={{textAlign:'center',width:'20%'}}/>
                 <Column field="date" header="DATE" style={{textAlign:'center'}} />
                 <Column field="status" header="STATUS"  body={this.status} style={{textAlign:'center'}} />
                 <Column header="ACTION" body={this.actionTemplate.bind(this)} style={{textAlign:'center'}}/>
             </DataTable>
-       <Paginator first={this.state.first} rows={this.state.rows} totalRecords={this.state.count} rowsPerPageOptions={[5,10,20,30]} onPageChange={this.onPageChange}></Paginator>
+       <Paginator first={this.state.first} rows={this.state.rows} totalRecords={this.state.count} rowsPerPageOptions={[6,10,20,30]} onPageChange={this.onPageChange}></Paginator>
+       </Fade></Zoom>
         </div>
-        <Modal open={this.state.open} onClose={this.onCloseModal} onEntered={this.editdata.bind(this)} closeIconSize='23'>
-        <div id="editable"><Loader options={options} className="spinner" />
-        </div>
+        <Modal isOpen={this.state.open} toggle={this.onCloseModal} fade={true} onOpened={this.editdata.bind(this)}>
+        <ModalHeader toggle={this.onCloseModal}><b>EDIT RECORDS</b></ModalHeader>
+        <ModalBody id="editable">
+        <Loader options={options} className="spinner" />
+        </ModalBody>
         </Modal>
       </div>
 

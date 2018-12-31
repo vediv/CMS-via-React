@@ -43,12 +43,12 @@ class Login extends Component {
     }
     else {
     return (
-      <div className="main">
+
       <div className="app flex-row align-items-center">
-        <Container className="main1" fixed>
+        <Container fixed>
           <Row className="justify-content-center">
             <Col md="8">
-              <CardGroup className="card1">
+              <CardGroup>
                 <Card className="p-4">
                   <CardBody>
                     <Form>
@@ -87,7 +87,7 @@ class Login extends Component {
           </Row>
         </Container>
       </div>
-      </div>
+  
     );
   }}
 }

@@ -1,6 +1,6 @@
 <?php
-$con_category_db=mysqli_connect("localhost","root","escl10.0");
-if(!$con)
+$con_category_db=mysqli_connect("localhost","test","escl1.0");
+if(!$con_category_db)
 {
 echo "not connected to server";
 }

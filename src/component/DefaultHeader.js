@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
 import acc from './acc.png';
 
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
@@ -24,21 +26,11 @@ class DefaultHeader extends Component {
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <AppNavbarBrand
-        />
+        <AppNavbarBrand>
+        <h1><b><a style={{color:'sky'}} href="/">CMS</a></b></h1>
+        </AppNavbarBrand>
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-        <Nav className="d-md-down-none" navbar>
-          <NavItem className="px-3">
-            <NavLink href="/">Dashboard</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#/users">Users</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Settings</NavLink>
-          </NavItem>
-        </Nav>
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-bell"></i><Badge pill color="danger">5</Badge></NavLink>
@@ -50,7 +42,7 @@ class DefaultHeader extends Component {
             <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
           </NavItem>
           <NavItem className="d-md-down-none">
-           {localStorage.getItem('username')}
+          <b> {localStorage.getItem('username')}</b>
           </NavItem>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
